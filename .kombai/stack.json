@@ -1,0 +1,16 @@
+// Kombai Tech Stack Configuration
+// Each value must be a string or an array of strings.
+// Example: "Framework": "Vite" or "Project Type": ["React", "Vue"]
+{
+  "Project Type": "React",
+  "React Version": "18",
+  "TS/JS": "JS",
+  "Router": "React Router v7 (declarative mode)",
+  "HTTP Server Framework": "Express",
+  "ORM/Client Library": "Sequelize",
+  "Server Runtime": "Node.js v20",
+  "Package Manager": "npm",
+  "Charting Library": "Recharts",
+  "CSS Implementation": "Vanilla CSS",
+  "Tailwind Version": "None"
+}
