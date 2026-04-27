@@ -1,26 +1,59 @@
 const { Sequelize } = require('sequelize');
 require('dotenv').config();
 
-const sequelize = new Sequelize(
-  process.env.DB_NAME     || 'restaurant_db',
-  process.env.DB_USER     || 'root',
-  process.env.DB_PASSWORD || '',
-  {
-    host:    process.env.DB_HOST || 'localhost',
-    port:    parseInt(process.env.DB_PORT) || 3306,
-    dialect: 'mysql',
-    logging: false, // mettre console.log pour voir les requêtes SQL
-    pool: {
-      max: 10,
-      min: 0,
-      acquire: 30000,
-      idle: 10000
-    },
-    define: {
-      timestamps: true,
-      underscored: false
-    }
+// Configuration centralisée
+const dbConfig = {
+  database: process.env.DB_NAME,
+  username: process.env.DB_USER,
+  password: process.env.DB_PASSWORD,
+  host: process.env.DB_HOST,
+  port: parseInt(process.env.DB_PORT),
+  dialect: 'mysql',
+
+  logging: false, // mettre console.log si debug
+
+  pool: {
+    max: 10,
+    min: 0,
+    acquire: 30000,
+    idle: 10000
+  },
+
+  define: {
+    timestamps: true,
+    underscored: false
+  },
+
+  dialectOptions: {
+    ssl: process.env.DB_SSL === 'true'
+      ? {
+
+          rejectUnauthorized: true
+        }
+      : false
   }
+};
+
+// Initialisation Sequelize
+const sequelize = new Sequelize(
+  dbConfig.database,
+  dbConfig.username,
+  dbConfig.password,
+  dbConfig
 );
 
-module.exports = sequelize;
+// 🔁 Fonction pour tester la connexion
+const connectDB = async () => {
+  try {
+    await sequelize.authenticate();
+    console.log('✅ Connexion à la base de données réussie');
+  } catch (error) {
+    console.error('❌ Impossible de se connecter à la base de données :', error.message);
+    process.exit(1); // stop le serveur si DB KO
+  }
+};
+
+module.exports = {
+  sequelize,
+  connectDB
+};
