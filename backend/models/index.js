@@ -41,9 +41,10 @@ User.hasMany(ActivityLog,   { foreignKey: 'userId' });
 
 // ── SYNC ─────────────────────────────────────────────────────────────────────
 // alter: true → met à jour les tables sans supprimer les données
-const syncDatabase = async (force = false) => {
-  await sequelize.sync({ alter: !force, force });
-  console.log('✅ Tables MySQL synchronisées');
+const syncDatabase = async () => {
+  console.log('⚠️ Sync en mode sécurisé (sans modification de structure)');
+  await sequelize.sync(); // 🔥 zéro alter, zéro force
+  console.log('✅ Tables synchronisées');
 };
 
 module.exports = {
